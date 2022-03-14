@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "AnswerComment";
+}
+
+<h1>AnswerComment</h1>
+
+<div>
+    <form method="post" asp-action="AnswerComment" 
+     asp-route-questionId=@ViewBag.QuestionId asp-route-answerId=@ViewBag.AnswerId>
+        <p>Comment</p>
+        <textarea name="comment" cols="80" rows="5"></textarea>
+        <div><button type="submit">Create Comment</button></div>
+    </form>
+</div>
+

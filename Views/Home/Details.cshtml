@@ -1,0 +1,181 @@
+﻿@model ViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h6>
+    <a asp-action="Create">Create New Question</a>
+</h6>
+
+<div >
+       
+  
+    @{
+        var IsQuestionUser = ViewBag.UserId == Model.Question.AppUserId? "disabled":"";
+    }
+         
+          <div >
+          <h6>
+             try to vote
+             <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
+            <input type="hidden" name="questionId" value=@Model.Question.Id />
+            <button name="questionVote" type="submit" value="1" style="color:red"
+            class="btn btn-outline-primary @IsQuestionUser">Up</button>
+            <button name="questionVote" type="submit" value="-1" style="color:red"
+            class="btn btn-outline-primary @IsQuestionUser">Down</button> 
+            </form>
+          </h6>
+          </div>
+        
+    <h5>[vote : @Model.Question.Vote] </h5>
+    <h4>@Model.Question.Title</h4>  
+    
+    <p>Date: @Model.Question.Date   Editor : @Model.Question.AppUser.UserName (@Model.Question.AppUser.Reputation)</p>
+    <h5>Content</h5>
+    <hr />
+    <p>@Model.Question.Content</p>
+    
+    <p>
+        Tag: 
+        @foreach(var qc in Model.Question.QuestiongTags)
+        { 
+            <a asp-action="Index" asp-route-tag=@qc.Tag.Name class="btn-outline-info">@qc.Tag.Name</a>
+        }
+    </p>
+   
+    <div >
+        @foreach(var c in Model.Question.Comments)
+        {
+          <hr />  
+          <textarea cols="80" rows="2" style="font-size:small">@c.Content - @c.User.UserName (@c.CreatedDate)</textarea>
+          
+          var IsQuesitonCommnetUSer = ViewBag.UserId==c.UserId? "": "disabled";
+         
+           <a asp-action="EditQuestionComment" asp-route-Id=@c.Id 
+           class="btn btn-outline-success @IsQuesitonCommnetUSer" >
+           Edit Comment</a>
+            
+        }
+                
+        
+    </div>
+    <p><a asp-action="QuestionComment" asp-route-questionId=@Model.Question.Id>Add a comment</a></p>
+
+@if(ViewBag.Answers>0)
+{
+    <div>
+       <h5>@ViewBag.Answers Answers</h5>
+       <hr />
+    </div>
+
+    @if(Model.PickAnswer.Id!= 0)
+    {
+       <div>
+          <h4>Picked</h4>
+       </div>
+        <div>
+            @{
+               var IsPickAnswernUser = ViewBag.UserId == Model.PickAnswer.AppUserId ? "disabled":"" ;
+             }
+                   <h6>
+                   try to vote 
+                   <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
+                   <input type="hidden" name="answerId" value=@Model.PickAnswer.Id />
+                   <button name="answerVote" type="submit" value="1" style="color:red"
+                   class="btn btn-outline-primary @IsPickAnswernUser">Up</button>
+                   <button name="answerVote" type="submit" value="-1" style="color:red"
+                   class="btn btn-outline-primary @IsPickAnswernUser">Down</button> 
+                   
+                   </form>
+                   </h6>
+                
+           <p>[Vote : @Model.PickAnswer.vote]</p>
+           
+           <p>@Model.PickAnswer.Content</p>
+           <p>Date : @Model.PickAnswer.Date</p>
+           <p>Editor : @Model.PickAnswer.AppUser.UserName (@Model.PickAnswer.AppUser.Reputation)</p>
+           @foreach(var c in Model.PickAnswer.Comments)
+                {
+                  <hr /> 
+                  <textarea cols="80" style="font-size:small">@c.Content - @c.User.UserName (@c.CreatedDate)</textarea>
+                   
+                  var IsPickAnswerCommentUSer = ViewBag.UserId == c.UserId ? "": "disabled";
+                    
+                        <a asp-action="EditAnswerComment" asp-route-Id=@c.Id
+                        class="btn btn-outline-success @IsPickAnswerCommentUSer">Edit Comment</a>
+                    
+                }
+           <p><a asp-action="AnswerComment" asp-route-questionId=@Model.Question.Id 
+               asp-route-answerId=@Model.PickAnswer.Id >Add a comment</a></p>
+         <hr />
+       </div>
+    }
+ 
+
+
+ @foreach(var a in Model.Answers)
+    {
+        @if(ViewBag.UserId==Model.Question.AppUserId)
+        {
+            <div>
+                <form asp-action="Details" method="post"  asp-route-pickId=@a.Id>
+                    <input type="hidden" name="questionId" value=@Model.Question.Id />
+                    <button type="submit">Pick</button>
+                </form>
+            </div>
+        }
+            <div>
+
+                @{
+                    var IsAnswerUser = ViewBag.UserId == a.AppUserId ? "disabled" :"" ;
+                }
+                  
+                
+                  <h6>
+                      try to vote 
+                      <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
+                      <input type="hidden" name="answerId" value=@a.Id />
+                      <button name="answerVote" type="submit" value="1" style="color:red"
+                       class="btn btn-outline-primary @IsAnswerUser">Up</button> 
+                      <button name="answerVote" type="submit" value="-1" style="color:red"
+                      class="btn btn-outline-primary @IsAnswerUser">Down</button> 
+                      </form>
+                 </h6>
+                
+           <p>[Vote : @a.vote]</p>
+           
+           <p>@a.Content</p>
+           <p>Date : @a.Date</p>
+           <p>Editor : @a.AppUser.UserName (@a.AppUser.Reputation)</p>
+            @foreach(var c in a.Comments)
+                {
+                 <hr /> 
+                    <textarea cols="80" style="font-size:small">@c.Content - @c.User.UserName (@c.CreatedDate)</textarea>
+                    var IsAnswerCommentUser = ViewBag.UserId == c.UserId ? "" : "disabled";
+
+                        <a asp-action="EditAnswerComment" asp-route-Id=@c.Id
+                        class="btn btn-outline-success @IsAnswerCommentUser" >Edit Comment</a>
+                    
+                 
+                }
+           <p><a asp-action="AnswerComment" asp-route-questionId=@Model.Question.Id 
+               asp-route-answerId=@a.Id >Add a comment</a></p>
+
+               
+         <hr />
+        </div>
+    }
+
+
+}
+    
+    <h4>Your Answer</h4>
+    <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
+    <textarea cols="70" rows="5" name="answerText" placeholder="Enter Your Answer"></textarea>       
+    <div>
+    <input type="hidden" name="questionId" value=@Model.Question.Id />
+    <button type="submit">Post Your Answer</button>    
+    </div>
+    </form>
+</>

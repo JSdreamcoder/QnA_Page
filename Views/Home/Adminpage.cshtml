@@ -1,0 +1,102 @@
+﻿@model List<Question>
+
+
+
+@if(ViewBag.Tag !=null)
+{
+    <h3>All Questions with tag(@ViewBag.Tag)</h3>
+}
+else
+{
+    <h3>All Questions</h3>
+}
+<div>
+    <a asp-action="CreateRole">Create Role - Only Admin</a>
+</div>
+<div>
+    <a asp-action="SetUserRole">Set User Role - Only Admin</a>
+</div>
+
+<h6>
+    <a asp-action="Create">Create New Question</a>
+</h6>
+<h4>@ViewBag.Count Questions  </h4>
+
+<div>
+ <h6>
+     Sort : <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="newest">Newest</a>
+            <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="answer">Most Answers</a>
+ </h6>
+ </div>
+
+@if(Model != null )
+{
+    
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Vote
+            </th>
+            <th>
+                Answers
+            </th>
+            <th>
+               Title
+            </th>
+            <th>
+                Date
+            </th>
+            
+            <th>
+                Editor
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Vote
+            </td>
+            <td>
+               @item.Answers.Count
+            </td>
+            <td>
+                @item.Title
+            </td>
+            <td>
+                @item.Date
+            </td>
+            
+            <td>
+               @item.AppUser.UserName (@item.AppUser.Reputation)
+            </td>
+            
+            <td>
+              <h5><a asp-action="Details" asp-route-Id=@item.Id>Detail Page</a></h5>
+            </td>
+            
+             <td>
+              
+                  <form asp-action="AdminPage" asp-route-questionId=@item.Id>
+                      <button type="submit">Delete</button>
+                  </form>
+              
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+Page : 
+@for(var i=1; i<=ViewBag.Page;i++)
+{
+   <a asp-action="Index"  asp-route-tab=@ViewBag.Tab asp-route-tag=@ViewBag.Tag   asp-route-page=@i>@i</a> 
+}
+</div>
+
+}

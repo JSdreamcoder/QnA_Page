@@ -1,0 +1,15 @@
+﻿@model Comment
+@{
+    ViewData["Title"] = "EditQuestionComment";
+}
+
+<h1>EditQuestionComment</h1>
+
+
+
+<form asp-action="EditQuestionComment" asp-route-Id=@Model.Id>
+    <textarea asp-for="Content" cols="80">@Model.Content</textarea>
+    <button type="submit">Edit</button>
+</form>
+
+

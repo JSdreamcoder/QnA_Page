@@ -1,0 +1,131 @@
+﻿@model List<Question>
+
+
+@if(ViewBag.Tag !=null)
+{
+    <h3>All Questions with tag(@ViewBag.Tag)</h3>
+}
+else
+{
+    <h3>All Questions</h3>
+}
+<div>
+    <a asp-action="AdminPage">Admin Page</a>
+</div>
+
+
+<h6>
+    <a asp-action="Create">Create New Question</a>
+</h6>
+<h4>@ViewBag.Count Questions (Page : @ViewBag.SelectedPage)  </h4>
+
+<div>
+ <h6>
+     Sort : <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="newest">Newest</a>
+            <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="answer">Most Answers</a>
+ </h6>
+ </div>
+
+@if(Model != null )
+{
+    
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Vote
+            </th>
+            <th>
+                Answers
+            </th>
+            <th>
+               Title
+            </th>
+            <th>
+                Date
+            </th>
+            
+            <th>
+                Editor
+            </th>
+            
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Vote
+            </td>
+            <td>
+               @item.Answers.Count
+            </td>
+            <td>
+                @item.Title
+            </td>
+            <td>
+                @item.Date
+            </td>
+            
+            <td>
+               @item.AppUser.UserName (@item.AppUser.Reputation)
+            </td>
+            
+            <td>
+              <a asp-action="Details" asp-route-Id=@item.Id>Detail Page</a>
+            </td>
+            <td>
+               @{
+                   var isUser = ViewBag.UserId!=item.AppUserId  ? "disabled" : "";
+               }
+               <a asp-action="EditQuestion" asp-route-questionId=@item.Id
+               class="btn btn-default @isUser">
+               Edit
+               </a>
+                
+            </td>
+             
+        </tr>
+}
+    </tbody>
+</table>
+
+
+ 
+
+  var IsPageFiirst = ViewBag.CurrentPage == 1 ? "disabled": "";
+  var IsPageLast = ViewBag.CurrentPage == ViewBag.TotalPage ? "disabled": "";
+<div>
+
+<a asp-action="Index"
+   asp-route-tab=@ViewBag.Tab
+   asp-route-tag=@ViewBag.Tag   
+   asp-route-page=@(ViewBag.CurrentPage -1)
+   class="btn btn-default @IsPageFiirst">
+   Prev
+   </a> 
+@for(var i=1; i<=ViewBag.TotalPage;i++)
+{
+   var isPage = ViewBag.CurrentPage == i ? "disabled" : "";
+   <a asp-action="Index"
+   asp-route-tab=@ViewBag.Tab
+   asp-route-tag=@ViewBag.Tag   
+   asp-route-page=@i
+   class="btn btn-default @isPage">
+   @i
+   </a> 
+}
+
+<a asp-action="Index"
+   asp-route-tab=@ViewBag.Tab
+   asp-route-tag=@ViewBag.Tag   
+   asp-route-page=@(ViewBag.CurrentPage +1)
+   class="btn btn-default @IsPageLast">
+   Next
+   </a> 
+</div>
+
+}
+

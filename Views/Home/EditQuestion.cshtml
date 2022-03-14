@@ -1,0 +1,20 @@
+﻿@model Assignment_QnAWeb.Models.Question
+
+
+<h1>EditQuestion</h1>
+
+
+
+<h4>Crreate New Question</h4>
+<hr />
+<form asp-action="EditQuestion" method="post" >
+
+<div>Title</div>
+<div><textarea cols ="80" rows="1" asp-for="Title">@Model.Title</textarea></div>
+<div>Content</div>
+<div><textarea cols ="80" rows="5" asp-for="Content">@Model.Content</textarea></div>
+<input asp-for="Id" value=@Model.Id type="hidden" />
+<div><button type="submit">Edit</button></div>
+
+
+</form>

@@ -1,0 +1,31 @@
+﻿@model Assignment_QnAWeb.Models.Question
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<h4>Crreate New Question</h4>
+<hr />
+<form asp-action="Create" method="post">
+
+<div>Title</div>
+<div><textarea cols ="80" rows="1" name="title"/></textarea></div>
+<div>Content</div>
+<div><textarea cols ="80" rows="5" name="content"></textarea></div>
+<div>Tag</div>
+<div>
+    <textarea cols ="24" rows="1" name="tag1"></textarea>
+     <textarea cols ="24" rows="1" name="tag2"></textarea>
+      <textarea cols ="24" rows="1" name="tag3"></textarea>
+</div>
+<div><button type="submit">Create</button></div>
+
+
+</form>
+
+
+
+
+

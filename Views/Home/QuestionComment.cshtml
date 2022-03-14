@@ -1,0 +1,15 @@
+﻿@model Comment
+<h1>QuestionComment</h1>
+
+<div>
+    <form method="post" asp-action="QuestionComment" >
+        <p>Comment</p>
+        <input asp-for="QuestionId" type="hidden" value=@ViewBag.QuestionId />
+        <input asp-for="UserId" type="hidden" value=@ViewBag.UserId />
+        <textarea asp-for="Content" cols="80" rows="5"></textarea>
+        <div><button type="submit">Create Comment</button></div>
+    </form>
+</div>
+
+
+

@@ -1,0 +1,17 @@
+﻿
+
+@{
+    ViewData["Title"] = "SetUserRole";
+}
+
+<h1>SetUserRole</h1>
+
+<form asp-action="SetUserRole" method="post">
+    <h3>Select User</h3>
+    <select asp-items=@ViewBag.userSelectList name="UserName"></select>
+    <h3>Select Role</h3>
+    <select asp-items=@ViewBag.roleSelectList name="RoleName"></select>
+    <button type="submit">Submit</button>
+</form>
+
+
