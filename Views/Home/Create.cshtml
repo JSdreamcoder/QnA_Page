@@ -1,8 +1,9 @@
 ﻿@model Assignment_QnAWeb.Models.Question
 
-@{
-    ViewData["Title"] = "Create";
-}
+
+ 
+ 
+
 
 
 
@@ -25,7 +26,7 @@
        
        <div class="fore-group">
            <div><label asp-for="Content"></label></div>
-           <textarea cols ="80" rows="5" asp-for="Content" class="form-control"></textarea>
+           <textarea id="mytextarea" cols ="80" rows="5" asp-for="Content" class="form-control"></textarea>
            <span asp-validation-for="Content" class="text-danger"></span>
        </div>
        <div>Tag</div>
@@ -43,6 +44,10 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
 }
+
+
+
 
 

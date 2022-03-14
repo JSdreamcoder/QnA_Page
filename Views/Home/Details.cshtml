@@ -1,8 +1,6 @@
 ﻿@model ViewModel
 
-@{
-    ViewData["Title"] = "Details";
-}
+
 
 <h6>
     <a asp-action="Create">Create New Question</a>
@@ -34,7 +32,7 @@
     <p>Date: @Model.Question.Date   Editor : @Model.Question.AppUser.UserName (@Model.Question.AppUser.Reputation)</p>
     <h5>Content</h5>
     <hr />
-    <p>@Model.Question.Content</p>
+    <P>@Html.Raw(Model.Question.Content)</P>
     
     <p>
         Tag: 
@@ -92,7 +90,7 @@
                 
            <p>[Vote : @Model.PickAnswer.vote]</p>
            
-           <p>@Model.PickAnswer.Content</p>
+           <p>@Html.Raw(Model.PickAnswer.Content)</p>
            <p>Date : @Model.PickAnswer.Date</p>
            <p>Editor : @Model.PickAnswer.AppUser.UserName (@Model.PickAnswer.AppUser.Reputation)</p>
                 @{
@@ -150,13 +148,13 @@
                 
            <p>[Vote : @a.vote]</p>
            
-           <p>@a.Content</p>
+           <p>@Html.Raw(a.Content)</p>
            <p>Date : @a.Date</p>
            <p>Editor : @a.AppUser.UserName (@a.AppUser.Reputation)</p>
             @{
                     IsAnswerUser = ViewBag.UserId == a.AppUserId ? "" :"disabled" ;
              }
-           <a asp-action="EditAnswer" asp-route-answerId=@Model.PickAnswer.Id
+           <a asp-action="EditAnswer" asp-route-answerId=@a.Id
             class="btn btn-outline-success @IsAnswerUser">Edit Answer</a>
             @foreach(var c in a.Comments)
                 {
@@ -182,7 +180,7 @@
     
     <h4>Your Answer</h4>
     <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
-    <textarea cols="70" rows="5" name="answerText" placeholder="Enter Your Answer"></textarea>       
+    <textarea id="mytextarea" cols="70" rows="5" name="answerText" placeholder="Enter Your Answer"></textarea>       
     <div>
     <input type="hidden" name="questionId" value=@Model.Question.Id />
     <button type="submit">Post Your Answer</button>    

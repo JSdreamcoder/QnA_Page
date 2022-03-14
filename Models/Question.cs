@@ -14,8 +14,8 @@ namespace Assignment_QnAWeb.Models
         [StringLength(1000, MinimumLength = 10, ErrorMessage = "Content must be more 10 Letters")]
         public string Content { get; set; }
 
-        //[NotMapped]
-        //public int testIdForNotMapped { get; set; }
+        [NotMapped]
+        public int testIdForNotMapped { get; set; }
 
         public string AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
