@@ -65,7 +65,7 @@
 @if(ViewBag.Answers>0)
 {
     <div>
-       <h5>@ViewBag.Answers Answers</h5>
+       <h4>@ViewBag.Answers Answers</h4>
        <hr />
     </div>
 
@@ -95,6 +95,11 @@
            <p>@Model.PickAnswer.Content</p>
            <p>Date : @Model.PickAnswer.Date</p>
            <p>Editor : @Model.PickAnswer.AppUser.UserName (@Model.PickAnswer.AppUser.Reputation)</p>
+                @{
+                    var IsPickAnswerUser = ViewBag.UserId == Model.PickAnswer.AppUserId ? "" : "disabled";
+                }
+           <a asp-action="EditAnswer" asp-route-answerId=@Model.PickAnswer.Id
+            class="btn btn-outline-success @IsPickAnswerUser">Edit Answer</a>
            @foreach(var c in Model.PickAnswer.Comments)
                 {
                   <hr /> 
@@ -148,6 +153,11 @@
            <p>@a.Content</p>
            <p>Date : @a.Date</p>
            <p>Editor : @a.AppUser.UserName (@a.AppUser.Reputation)</p>
+            @{
+                    IsAnswerUser = ViewBag.UserId == a.AppUserId ? "" :"disabled" ;
+             }
+           <a asp-action="EditAnswer" asp-route-answerId=@Model.PickAnswer.Id
+            class="btn btn-outline-success @IsAnswerUser">Edit Answer</a>
             @foreach(var c in a.Comments)
                 {
                  <hr /> 
