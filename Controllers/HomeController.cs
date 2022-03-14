@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-
+//for git push test
 namespace Assignment_QnAWeb.Controllers
 {   [Authorize]
     public class HomeController : Controller
