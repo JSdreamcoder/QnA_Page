@@ -8,24 +8,41 @@
 
 <h4>Crreate New Question</h4>
 <hr />
-<form asp-action="Create" method="post">
+   <form asp-action="Create" method="post">
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+             <input type="hidden" asp-for="AppUserId" value=@ViewBag.User.UserName />
+             <input type="hidden" asp-for="Date" value=@DateTime.Now /> 
+           
+             <div class="form-group">
+              
+                <div><label asp-for="Title"></label></div>
+                <textarea cols ="80" rows="1" asp-for="Title" class="form-control" /></textarea>
+                <span asp-validation-for="Title" class="text-danger"></span>
+             </div>
+       
+       
+       
+       
+       <div class="fore-group">
+           <div><label asp-for="Content"></label></div>
+           <textarea cols ="80" rows="5" asp-for="Content" class="form-control"></textarea>
+           <span asp-validation-for="Content" class="text-danger"></span>
+       </div>
+       <div>Tag</div>
+       <div>
+           <textarea cols ="24" rows="1" name="tag1"></textarea>
+            <textarea cols ="24" rows="1" name="tag2"></textarea>
+             <textarea cols ="24" rows="1" name="tag3"></textarea>
+       </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+       
+       
+   </form>
 
-<div>Title</div>
-<div><textarea cols ="80" rows="1" name="title"/></textarea></div>
-<div>Content</div>
-<div><textarea cols ="80" rows="5" name="content"></textarea></div>
-<div>Tag</div>
-<div>
-    <textarea cols ="24" rows="1" name="tag1"></textarea>
-     <textarea cols ="24" rows="1" name="tag2"></textarea>
-      <textarea cols ="24" rows="1" name="tag3"></textarea>
-</div>
-<div><button type="submit">Create</button></div>
-
-
-</form>
-
-
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
 

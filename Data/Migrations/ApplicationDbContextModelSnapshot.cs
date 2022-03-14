@@ -56,7 +56,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Answer", (string)null);
+                    b.ToTable("Answer");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.AnswerVote", b =>
@@ -82,7 +82,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("AnswerVote", (string)null);
+                    b.ToTable("AnswerVote");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.AppUser", b =>
@@ -186,7 +186,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comment", (string)null);
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.Question", b =>
@@ -203,14 +203,16 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("Vote")
                         .HasColumnType("int");
@@ -219,7 +221,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.QuestionTag", b =>
@@ -242,7 +244,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTag", (string)null);
+                    b.ToTable("QuestionTag");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.QuestionVote", b =>
@@ -269,7 +271,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionVote", (string)null);
+                    b.ToTable("QuestionVote");
                 });
 
             modelBuilder.Entity("Assignment_QnAWeb.Models.Tag", b =>
@@ -286,7 +288,7 @@ namespace Assignment_QnAWeb.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag", (string)null);
+                    b.ToTable("Tag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

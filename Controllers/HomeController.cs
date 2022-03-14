@@ -350,15 +350,16 @@ namespace Assignment_QnAWeb.Controllers
             return RedirectToAction("Details");
         }
 
+        //Create Question
         public IActionResult Create()
         {
-            
+            ViewBag.User = _db.Users.First(u => u.UserName == User.Identity.Name);
             return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string title,string content,string tag1,
-                                                string tag2 , string tag3)
+        public async Task<IActionResult> Create([Bind("Title,Content,Date,AppUserId")] Question question
+                                                 , string tag1, string tag2, string tag3)
         {
             try
             {
@@ -372,24 +373,32 @@ namespace Assignment_QnAWeb.Controllers
                 if (tag3 != null)
                     tagList.Add(tag3);
 
-                if (title == null || content == null || tagList==null)
+                if (tagList==null)
                     return BadRequest();
-                
+
+                ModelState.ClearValidationState("QuestionTags");
                 var CurrentUser = await _userManager.FindByNameAsync(User.Identity.Name);
-                var newQuestion = new Question();
-                newQuestion.Title = title;
-                newQuestion.Content = content;
-                newQuestion.AppUserId = CurrentUser.Id.ToString();
-                newQuestion.Date = DateTime.Now;
-                _db.Question.Add(newQuestion);
-                await _userManager.UpdateAsync(CurrentUser); //db.savechanges
+                //or ModelState.IsValid
+                if (!TryValidateModel(question))
+                {
+                    question.AppUserId = CurrentUser.Id;
+                    _db.Question.Add(question);
+                    //await _userManager.UpdateAsync(CurrentUser); //db.savechanges
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+                
                 foreach (var tag in tagList)
                 {
 
                     if (_db.Tag.Any(t => t.Name == tag))
                     {
                         var newQuestionTag = new QuestionTag();
-                        newQuestionTag.QuestionId = newQuestion.Id;
+                        newQuestionTag.QuestionId = question.Id;
                         newQuestionTag.TagId = _db.Tag.First(t => t.Name == tag).Id;
                         _db.QuestionTag.Add(newQuestionTag);
                     }
@@ -400,7 +409,7 @@ namespace Assignment_QnAWeb.Controllers
                         _db.Tag.Add(newTag);
                         await _userManager.UpdateAsync(CurrentUser);
                         var newQuestionTag = new QuestionTag();
-                        newQuestionTag.QuestionId = newQuestion.Id;
+                        newQuestionTag.QuestionId = question.Id;
                         newQuestionTag.TagId = _db.Tag.First(t => t.Name == tag).Id;
                         _db.QuestionTag.Add(newQuestionTag);
                     }
@@ -445,58 +454,34 @@ namespace Assignment_QnAWeb.Controllers
             return RedirectToAction("Details", new {Id=question.Id});
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult CreateRole()
+
+        public IActionResult EditAnswer(int answerId)
         {
-            return View();
+            var answer = _db.Answer.Find(answerId);
+
+            return View(answer);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateRole(string newRole)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAnswer(Answer answer)
         {
-            if (newRole == null)
+            if (answer == null)
             {
                 return BadRequest();
-            }
-            await _roleManager.CreateAsync(new IdentityRole(newRole));
-            _db.SaveChanges();
-            
-            return View();
-        }
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult SetUserRole()
-        {
-            SelectList userSelectList = new SelectList(_db.Users, "UserName", "UserName");
-            SelectList roleSelectList = new SelectList(_db.Roles, "Name", "Name");
-            ViewBag.userSelectList = userSelectList;
-            ViewBag.roleSelectList = roleSelectList;
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> SetUserRole(string UserName, string RoleName)
-        {
-            if (UserName == null || RoleName == null)
+            };
+            try
             {
-                return NotFound();
+                var editAnswer = _db.Answer.First(a => a.Id == answer.Id);
+                editAnswer.Content = answer.Content;
+                editAnswer.Date = DateTime.Now;
+                _db.Answer.Update(editAnswer);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Details", new { Id = editAnswer.QuestionId });
             }
-            var user = await _userManager.FindByNameAsync(UserName);
-
-            if (await _roleManager.RoleExistsAsync(RoleName))
+            catch (Exception ex)
             {
-
-                if (!await _userManager.IsInRoleAsync(user, RoleName))
-                {
-                    await _userManager.AddToRoleAsync(user, RoleName);
-                }
-                //_db.SaveChanges();
-                await _userManager.UpdateAsync(user);
+                return RedirectToAction("Error", new { message = ex.Message });
             }
-
-            return RedirectToAction("SetUserRole");
-        }
-        public IActionResult Privacy()
-        {
             return View();
         }
 
@@ -774,8 +759,62 @@ namespace Assignment_QnAWeb.Controllers
             return RedirectToAction("AdminPage");
         }
 
-   
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateRole()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateRole(string newRole)
+        {
+            if (newRole == null)
+            {
+                return BadRequest();
+            }
+            await _roleManager.CreateAsync(new IdentityRole(newRole));
+            _db.SaveChanges();
+
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult SetUserRole()
+        {
+            SelectList userSelectList = new SelectList(_db.Users, "UserName", "UserName");
+            SelectList roleSelectList = new SelectList(_db.Roles, "Name", "Name");
+            ViewBag.userSelectList = userSelectList;
+            ViewBag.roleSelectList = roleSelectList;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetUserRole(string UserName, string RoleName)
+        {
+            if (UserName == null || RoleName == null)
+            {
+                return NotFound();
+            }
+            var user = await _userManager.FindByNameAsync(UserName);
+
+            if (await _roleManager.RoleExistsAsync(RoleName))
+            {
+
+                if (!await _userManager.IsInRoleAsync(user, RoleName))
+                {
+                    await _userManager.AddToRoleAsync(user, RoleName);
+                }
+                //_db.SaveChanges();
+                await _userManager.UpdateAsync(user);
+            }
+
+            return RedirectToAction("SetUserRole");
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(string message)
