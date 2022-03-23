@@ -1,0 +1,12 @@
+﻿@model List<Question>
+
+
+<h1>QuestionList</h1>
+<ul>
+@foreach(var question in Model)
+{
+   <li> @question.Id @question.Title</li>
+               
+
+}
+</ul>

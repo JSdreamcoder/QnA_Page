@@ -11,7 +11,7 @@ namespace Assignment_QnAWeb.Models
         public string Title { get; set; }
         public DateTime Date { get; set; }
         [Display(Name = "Question Content")]
-        [StringLength(1000, MinimumLength = 10, ErrorMessage = "Content must be more 10 Letters")]
+        [StringLength(int.MaxValue, MinimumLength = 10, ErrorMessage = "Content must be more 10 Letters")]
         public string Content { get; set; }
 
         [NotMapped]

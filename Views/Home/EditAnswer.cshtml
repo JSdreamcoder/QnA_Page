@@ -5,6 +5,6 @@
 <h1>EditAnswer</h1>
 
 <form asp-action="EditAnswer" asp-route-Id=@Model.Id>
-    <textarea asp-for="Content" cols="80" id="mytextarea">@Model.Content</textarea>
+    <textarea asp-for="Content" cols="80" rows="20" id="mytextarea">@Model.Content</textarea>
     <button type="submit">Edit</button>
 </form>

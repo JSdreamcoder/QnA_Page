@@ -180,7 +180,7 @@
     
     <h4>Your Answer</h4>
     <form method="post" asp-action="Details" asp-route-Id=@Model.Question.Id >
-    <textarea id="mytextarea" cols="70" rows="5" name="answerText" placeholder="Enter Your Answer"></textarea>       
+    <textarea id="mytextarea" cols="70" rows="20" name="answerText" placeholder="Enter Your Answer"></textarea>       
     <div>
     <input type="hidden" name="questionId" value=@Model.Question.Id />
     <button type="submit">Post Your Answer</button>    
