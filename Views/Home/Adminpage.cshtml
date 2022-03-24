@@ -8,7 +8,7 @@
 }
 else
 {
-    <h3>All Questions</h3>
+    <h3>All Questions(AdminPage)</h3>
 }
 <div>
     <a asp-action="CreateRole">Create Role - Only Admin</a>
@@ -24,8 +24,8 @@ else
 
 <div>
  <h6>
-     Sort : <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="newest">Newest</a>
-            <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="answer">Most Answers</a>
+     Sort : <a asp-action="Adminpage" asp-route-tag=@ViewBag.Tag asp-route-tab="newest">Newest</a>
+            <a asp-action="Adminpage" asp-route-tag=@ViewBag.Tag asp-route-tab="answer">Most Answers</a>
  </h6>
  </div>
 
@@ -95,7 +95,7 @@ else
 Page : 
 @for(var i=1; i<=ViewBag.Page;i++)
 {
-   <a asp-action="Index"  asp-route-tab=@ViewBag.Tab asp-route-tag=@ViewBag.Tag   asp-route-page=@i>@i</a> 
+   <a asp-action="Adminpage"  asp-route-tab=@ViewBag.Tab asp-route-tag=@ViewBag.Tag   asp-route-page=@i>@i</a> 
 }
 </div>
 

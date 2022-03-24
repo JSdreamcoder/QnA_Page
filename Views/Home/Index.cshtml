@@ -44,7 +44,9 @@ else
             <th>
                 Date
             </th>
-            
+            <th>
+                Tag
+            </th>
             <th>
                 Editor
             </th>
@@ -68,7 +70,12 @@ else
             <td>
                 @item.Date
             </td>
-            
+            <td>
+              @foreach(var qc in item.QuestiongTags)
+              { 
+                  <a asp-action="Index" asp-route-tag=@qc.Tag.Name class="btn-outline-info">@qc.Tag.Name</a>
+              }
+            </td>
             <td>
                @item.AppUser.UserName (@item.AppUser.Reputation)
             </td>

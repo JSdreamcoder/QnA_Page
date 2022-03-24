@@ -72,12 +72,15 @@ namespace Assignment_QnAWeb.Controllers
             var questions = new List<Question>();
             if (tag != null)
             {
-                questions = _db.Question.Include(q => q.Answers).Include(q => q.AppUser).
-                            Where(q => questiontags.Select(qt => qt.QuestionId).Contains(q.Id)).
+                questions = _db.Question.Include(q => q.Answers).Include(q => q.AppUser)
+                            .Include(q=>q.QuestiongTags).ThenInclude(qt=>qt.Tag)
+                            .Where(q => questiontags.Select(qt => qt.QuestionId).Contains(q.Id)).
                             ToList();
             }else
             {
-                questions = _db.Question.Include(q => q.Answers).Include(q => q.AppUser).ToList();
+                questions = _db.Question.Include(q => q.Answers).Include(q => q.AppUser)
+                                        .Include(q => q.QuestiongTags).ThenInclude(qt => qt.Tag)
+                                        .ToList();
             }
             
            
@@ -119,7 +122,7 @@ namespace Assignment_QnAWeb.Controllers
             ViewBag.TotalPage = Math.Ceiling(ViewBag.Count/(double)numberOfItems);
             var itemsInPage =orderedList.Skip((page-1)*numberOfItems).Take(numberOfItems).ToList();
             ViewBag.CurrentPage = page;
-
+            
 
 
             return View(itemsInPage);

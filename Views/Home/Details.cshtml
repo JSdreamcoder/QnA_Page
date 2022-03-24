@@ -41,6 +41,13 @@
             <a asp-action="Index" asp-route-tag=@qc.Tag.Name class="btn-outline-info">@qc.Tag.Name</a>
         }
     </p>
+    @{
+        var isUser = ViewBag.UserId!=Model.Question.AppUserId  ? "disabled" : "";
+     }
+    <a asp-action="EditQuestion" asp-route-questionId=@Model.Question.Id
+    class="btn btn-success @isUser">
+    Edit Question
+    </a>
    
     <div >
         @foreach(var c in Model.Question.Comments)
