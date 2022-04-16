@@ -21,5 +21,4 @@ Users should be able to post a new question, from a link in the main page. This 
 
 9. Users may be set as Administrators. Administrators have the option to visit an Administrative page which allows them to view all of the Questions on the site, and delete individual Questions.
 
-## Adnmin Id  : Admin@mitt.ca   Password : P@ssword1
-## User Id : User@mitt.ca  Password : P@ssword1
+
