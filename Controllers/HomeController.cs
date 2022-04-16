@@ -48,9 +48,29 @@ namespace Assignment_QnAWeb.Controllers
                         pageNumber ?? 1, pageSize));
 
         }
-
         [AllowAnonymous]
-        public IActionResult Index(string tab, int page, string tag)
+        public async Task<IActionResult> testPage(
+          
+           int? pageNumber)
+        {
+
+
+
+
+            var quesitons = _db.Question;
+        int pageSize = 10;
+        return View(await PaginatedList<Question>.CreateAsync(quesitons.AsNoTracking(), pageNumber ?? 1, pageSize));
+        
+        }
+
+
+
+
+
+
+
+[AllowAnonymous]
+        public IActionResult Index(string tab, int page, string tag, string searchString)   
         {
             if (tab == null)
             {
@@ -64,6 +84,8 @@ namespace Assignment_QnAWeb.Controllers
             {
             ViewBag.UserId = _db.Users.First(u=> u.UserName == User.Identity.Name).Id;
             }
+            ViewData["CurrentFilter"] = searchString;
+         
             ViewBag.SelectedPage = page;
             ViewBag.Tag = tag;
             var questiontags = _db.QuestionTag.Include(x => x.Tag).
@@ -82,9 +104,10 @@ namespace Assignment_QnAWeb.Controllers
                                         .Include(q => q.QuestiongTags).ThenInclude(qt => qt.Tag)
                                         .ToList();
             }
+
             
-           
-            
+
+
             var orderedList = new List<Question>();
             if (tab == "newest")
             {
@@ -95,6 +118,11 @@ namespace Assignment_QnAWeb.Controllers
                 orderedList = questions.OrderByDescending(q => q.Answers.Count).ToList();
             
             }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orderedList = orderedList.Where(q => q.Title.ToLower().Contains(searchString.ToLower())).ToList();
+            }
+
             ViewBag.Tab = tab;
             // paging (10questions)
             // My own method
@@ -426,7 +454,7 @@ namespace Assignment_QnAWeb.Controllers
 
             return RedirectToAction("Index");
         }
-
+        [Authorize]
         public IActionResult EditQuestion(int questionId)
         {
             var question = _db.Question.First(q => q.Id == questionId);

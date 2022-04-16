@@ -19,6 +19,16 @@ else
 </h6>
 <h4>@ViewBag.Count Questions (Page : @ViewBag.SelectedPage)  </h4>
 
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by Title: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
 <div>
  <h6>
      Sort : <a asp-action="Index" asp-route-tag=@ViewBag.Tag asp-route-tab="newest">Newest</a>
@@ -65,7 +75,7 @@ else
                @item.Answers.Count
             </td>
             <td>
-                @item.Title
+                <a asp-action="Details" asp-route-Id=@item.Id>@item.Title</a> 
             </td>
             <td>
                 @item.Date
@@ -79,10 +89,7 @@ else
             <td>
                @item.AppUser.UserName (@item.AppUser.Reputation)
             </td>
-            
-            <td>
-              <a asp-action="Details" asp-route-Id=@item.Id>Detail Page</a>
-            </td>
+          
             <td>
                @{
                    var isUser = ViewBag.UserId!=item.AppUserId  ? "disabled" : "";
